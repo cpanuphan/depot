@@ -51,4 +51,12 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to products_url
   end
+
+  test "should display products" do
+    get products_url
+    assert_response :success
+    assert_select '#columns #side a', minimum: 4
+    assert_select '#main table tbody tr', 3
+    assert_select '.list_description dt', 'Programming Ruby 1.9'
+  end
 end
