@@ -46,7 +46,8 @@ class ProductTest < ActiveSupport::TestCase
       title: products(:ruby).title,
       description: "yyy",
       price: 1,
-      image_url: "fred.gif")
+      image_url: "fred.gif"
+    )
     assert product.invalid?
     # assert_equal ["has already been taken"], product.errors[:title]
   end
@@ -56,7 +57,8 @@ class ProductTest < ActiveSupport::TestCase
       title: products(:ruby).title,
       description: "yyy",
       price: 1,
-      image_url: "fred.gif")
+      image_url: "fred.gif"
+    )
     assert product.invalid?
     assert_equal [I18n.translate('errors.messages.taken')],
     product.errors[:title]
