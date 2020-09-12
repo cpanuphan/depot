@@ -33,6 +33,9 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+gem 'unicorn'
+gem 'unicorn-worker-killer'
+
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
 
@@ -50,15 +53,18 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   # Use postgresql as the database for Active Record
   gem 'pg', '>= 0.18', '< 2.0'
-end
 
-group :production do
-  gem 'mysql2', '~> 0.5.2'
+  # Use Capistrano for deployment
+  gem 'mailcatcher', require: false
   gem 'capistrano'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano3-unicorn'
+end
+
+group :production do
+  gem 'mysql2', '~> 0.5.2'
   gem 'ed25519', '~> 1.2'
   gem 'bcrypt_pbkdf', '~> 1'
 end

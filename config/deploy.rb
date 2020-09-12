@@ -3,10 +3,10 @@ lock "~> 3.14.1"
 
 set :application, "depot"
 set :repo_url, "git@github.com:cpanuphan/depot.git"
-
 set :default_stage, "production"
-
 set :user, "deployer"
+
+set :branch, ENV['BRANCH'] || 'master'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -33,7 +33,7 @@ set :linked_files, fetch(:linked_files, []).push('config/unicorn.rb','config/dat
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
 
 # Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+# set :default_env, { path: "/home/deployer/.rbenv/bin:$PATH" }
 
 # Default value for local_user is ENV['USER']
 # set :local_user, -> { `git config user.name`.chomp }
@@ -44,33 +44,29 @@ set :keep_releases, 5
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 
-set :rbenv_type, :system               # Defaults to: :auto
-set :rbenv_ruby_version, '2.3.0'      # Defaults to: 'default'
-
 set :rails_env, 'production'
-
+set :rbenv_type, :user # :system or :user
+set :rbenv_ruby, '2.3.0'
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+set :rbenv_map_bins, %w(rake gem bundle ruby rails)
+set :rbenv_roles, :all # default value
 set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 set :unicorn_config_path, "config/unicorn.rb"
 set :unicorn_rack_env, 'production' # "development", "deployment", or "none"
+set :unicorn_roles, :web
 
+# before "deploy:compile_assets", :yarn_install
+# desc "Install dependencies"
+# task :yarn_install do
+#     puts "\n=== Setup NPM path: #{current_path} ===\n"
+#     on roles(:web) do
+#         execute "cd #{release_path} && yarn install"
+#     end
+# end
+
+after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
-
- desc 'Restart application'
   task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      invoke 'unicorn:restart'
-    end
+    invoke 'unicorn:legacy_restart'
   end
-
-  after :publishing, :restart
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
-
 end
