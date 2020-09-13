@@ -90,5 +90,5 @@ production:
   pool: 5
   host: localhost
   database: depot_production
-  username: depot
-  password: <%= ENV['DEPOT_DATABASE_PASSWORD'] %>
+  username: <%= ENV['RAILS_DB_USERNAME'] %>
+  password: <%= ENV['RAILS_DB_PASSWORD'] %>
