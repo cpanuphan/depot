@@ -26,7 +26,7 @@ set :deploy_to, "/srv/www/apps/depot"
 
 # Default value for :linked_files is []
 # append :linked_files, "config/database.yml"
-set :linked_files, fetch(:linked_files, []).push('config/unicorn.rb','config/database.yml',)
+set :linked_files, fetch(:linked_files, []).push('config/unicorn.rb','config/database.yml','.env')
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system"
@@ -54,7 +54,6 @@ set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 set :unicorn_config_path, "config/unicorn.rb"
 set :unicorn_rack_env, 'production' # "development", "deployment", or "none"
 set :unicorn_roles, :web
-set :default_env, { path: "$PATH:/usr/local/rbenv/bin/:/usr/local/rbenv/shims/" }
 
 # before "deploy:compile_assets", :yarn_install
 # desc "Install dependencies"
