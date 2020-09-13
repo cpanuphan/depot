@@ -54,6 +54,7 @@ set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
 set :unicorn_config_path, "config/unicorn.rb"
 set :unicorn_rack_env, 'production' # "development", "deployment", or "none"
 set :unicorn_roles, :web
+set :default_env, { path: "$PATH:/usr/local/rbenv/bin/:/usr/local/rbenv/shims/" }
 
 # before "deploy:compile_assets", :yarn_install
 # desc "Install dependencies"
